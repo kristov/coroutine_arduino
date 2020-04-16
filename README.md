@@ -56,4 +56,4 @@ Subsequent calls to the coroutine are made through `coresume()` which will resum
 
 ## Ending the coroutine
 
-The coroutine must be finished via `coend()` which simply zeros the `co_psp` variable. The kernel then needs to call `cogetstack()` to check if this `coresume()` is returning from a `coyield()` or a `coend()`. It's clunky but I could not figure out a way to return a value in this setup.
+The coroutine must be finished via `coend()` which simply zeros the `co_psp` variable. The kernel then needs to call `cogetstack()` to check if this `coresume()` is returning from a `coyield()` or a `coend()`. It's clunky but I could not figure out a way to return a value in this setup. However in an OS environment where there are multiple stacks the kernel loop will want to save the stack pointer before calling `coswitch()` to enable a different coroutine.
