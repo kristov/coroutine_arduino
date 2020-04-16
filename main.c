@@ -88,7 +88,7 @@ int main() {
     _delay_ms(500);
     costart(&ps[255], the_coroutine);
 
-    uart_println((uint8_t*)"4. returned from kstart");
+    uart_println((uint8_t*)"4. returned from costart");
     _delay_ms(500);
     while (1) {
         _delay_ms(500);
