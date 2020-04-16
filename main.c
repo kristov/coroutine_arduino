@@ -136,10 +136,9 @@ void kresume() {
  * 
  */
 void kend() {
+    psp = 0;
     asm volatile(
         "; zero the proc stack pointer\n\t"
-        "sts psp, 0x00\n\t"
-        "sts psp+1, 0x00\n\t"
         "; restore the kernel stack\n\t"
         "lds __tmp_reg__,ksp\n\t"
         "out %[_SPL_],__tmp_reg__\n\t"
@@ -155,15 +154,17 @@ void kend() {
 void the_coroutine() {
     char* msg = "Test message";
     uart_println((uint8_t*)"3. coroutine started, yielding");
-    _delay_ms(1000);
+    _delay_ms(500);
     kyield();
     uart_println((uint8_t*)"5. continued from yield");
-    _delay_ms(1000);
+    _delay_ms(500);
     while (*msg) {
         while (uart_putc(*msg));
         msg++;
         kyield();
     }
+    while (uart_putc('\n'));
+    while (uart_putc('\r'));
     kend();
 }
 
@@ -174,16 +175,16 @@ int main() {
     // initalize the UART
     uart_init();
     uart_println((uint8_t*)"1. main started");
-    _delay_ms(1000);
+    _delay_ms(500);
 
     uart_println((uint8_t*)"2. starting coroutine");
-    _delay_ms(1000);
+    _delay_ms(500);
     kstart(the_coroutine);
 
     uart_println((uint8_t*)"4. returned from kstart");
-    _delay_ms(1000);
+    _delay_ms(500);
     while (1) {
-        _delay_ms(1000);
+        _delay_ms(500);
         if (psp) {
             kresume();
         }
