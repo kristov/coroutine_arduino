@@ -138,7 +138,6 @@ void kresume() {
 void kend() {
     psp = 0;
     asm volatile(
-        "; zero the proc stack pointer\n\t"
         "; restore the kernel stack\n\t"
         "lds __tmp_reg__,ksp\n\t"
         "out %[_SPL_],__tmp_reg__\n\t"
